@@ -1,9 +1,12 @@
+//Arguments my-tweets, spotify-this-song [song name], movie-this [movie screen_name]
+
+
 //Arguments in terminal
 var arg = process.argv[2];
 var arg2 = [];
-var newArg2;
+var newArg	2;
 
-//For Spotify, input now takes multiple words without ''
+//For multi-worded arguments, terminal now takes multiple words without ''
 for (var j=3; j<process.argv.length; j++){
 	arg2.push(process.argv[j]);
 }
@@ -19,16 +22,26 @@ var fs = require('fs');
 //Linking twitter keys to twitter api
 var Twitter = new twitter({
 	consumer_key: keys.twitterKeys.consumer_key,
-  consumer_secret: keys.twitterKeys.consumer_secret,
-  access_token_key: keys.twitterKeys.access_token_key,
-  access_token_secret: keys.twitterKeys.access_token_secret
+	consumer_secret: keys.twitterKeys.consumer_secret,
+	access_token_key: keys.twitterKeys.access_token_key,
+	access_token_secret: keys.twitterKeys.access_token_secret
 });
 
 //Linking spotify keys to spotify api
 var Spotify = new spotify({
-  id: keys.spotifyKeys.id,
-  secret: keys.spotifyKeys.secret
+	id: keys.spotifyKeys.id,
+	secret: keys.spotifyKeys.secret
 });
+
+//Bonus: Write agruments into log.txt
+//Synchronious Files? .writeFileSync vs .writeFile
+fs.appendFile('log.txt', arg +', '+ newArg2 + '\n', function(err){
+	if (err){
+		console.log('failure to write');
+	}else{
+		console.log('written success');
+	}
+})
 
 
 
@@ -115,6 +128,7 @@ function movieThisArg2(){
 	});
 };
 
+
 //OMDB no newArg2
 function movieThisDefault(){
 	var omdb = 'http://www.omdbapi.com/?apikey=' + keys.omdbKey + '&t=Mr.Nobody';
@@ -122,6 +136,7 @@ function movieThisDefault(){
 		if (err){
 			console.log('failure');
 		}else{//JSON.parse(contents) needs to be used to access the object
+			//wtf is the difference btwn JSON.parse and JSON.Stringify??
 			console.log('\n'+'Neo: What are you trying to tell me? That I have use Google to look up movies?');
 			console.log("Morpheus: No, Neo. I'm trying to tell you that when you're ready, you won't have to." + '\n');
 			console.log('Title:', JSON.parse(contents).Title, '\n');
@@ -157,6 +172,7 @@ if (arg === `my-tweets`){
 }else if (arg === 'movie-this'){
 	movieThisDefault();
 
+//Ugh this is hella long.
 }else if (arg === 'do-what-it-says'){
 	//idk how to make it shorter. help plz.
 	//do-what-it-says
@@ -187,7 +203,7 @@ if (arg === `my-tweets`){
 			}else if(arg === 'movie-this'){
 				movieThisDefault();
 			}else{
-				console.log('Nope');
+				console.log('Morpheus: This is your last chance. After this, there is no turning back. You take the blue pill - the story ends, you wake up in your bed and believe whatever you want to believe. You take the red pill - you stay in Wonderland and I show you how deep LIRI goes.');
 			};
 		};
 	});//fs
